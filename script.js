@@ -20,9 +20,13 @@ $(document).ready(function() {
         {
             var add = $("<div>");
             add.text(city);
-            add.addClass("card p-2");
+            add.addClass("card p-2 btnCity");
+            add.attr("data-name",city);
             $("#menu").append(add);
         }
+
+
+
 
     }
 
@@ -30,13 +34,11 @@ $(document).ready(function() {
 
 //functions
 
-//events
-
-    $("#searchBtn").on("click",function(){
-
-        if($("#searchInput").val() != "")
+function setWeather(name)
+{
+    if(name != "")
         {
-            var city = $("#searchInput").val();
+            var city = name;
             
             var urlNow = "http://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid=" + key;
             
@@ -53,36 +55,37 @@ $(document).ready(function() {
                 var mainDate = moment(Mdt).format("DD/MM/YYYY");
 
                 $("#city").text(response.name + " ("+ mainDate +")");
+                var icon = "http://openweathermap.org/img/wn/"+ response.weather[0].icon+"@2x.png";
+                $("#mainIcon").attr("src",icon);
+
                 var kelvin = 273.15;
                 var temp = 32 + (9/5 * (response.main.temp - kelvin));
                 $("#temperature").text("Temperature: " + temp.toFixed(2) + " °F");
                 var windSpeed = response.wind.speed*2.237;
-                $("#humidity").text(response.main.humidity + "%");
+                $("#humidity").text("Humidity: " + response.main.humidity + "%");
                 $("#wind").text("Wind speed: " + windSpeed.toFixed(2) + " MPH");
                 $("#uv-index").text("0");
                
                 //save city
                 var current = JSON.parse(localStorage.getItem("CitiesFile"));
-                if(current.indexOf(response.name) == -1)
+                if(current.indexOf(response.name.toLowerCase()) == -1)
                 {
-                    alert("no existe");
-                    current.push(response.name);
+                    
+                    current.push(response.name.toLowerCase());
                     localStorage["CitiesFile"] = JSON.stringify(current);
 
                     var add = $("<div>");
                     add.text(response.name);
                     add.addClass("card p-2");
+                    add.attr("data-name",response.name);
                     $("#menu").append(add);
 
 
                 }
                 else
                 {
-                    alert("City already added");
+                    
                 }
-
-
-              
 
                 //retrive forecast
                 var lat = response.coord.lat;
@@ -106,7 +109,7 @@ $(document).ready(function() {
                     $("#cards").empty();
                    
                     
-                    for(var i=1;i<6;i++)
+                    for(var i=0;i<5;i++)
                     {
                         var date = daysForcast[i].dt;
                         var dt = new Date(date * 1000);
@@ -118,6 +121,14 @@ $(document).ready(function() {
                         datec.text(moment(dt).format("DD/MM/YYYY"));
                         forecastCard.append(datec);
 
+                        var icon = "http://openweathermap.org/img/wn/"+ daysForcast[i].weather[0].icon+"@2x.png";
+                        var iconDiv = $("<img>");
+                        iconDiv.addClass("mainIcon");
+                        iconDiv.attr("src",icon);
+                        forecastCard.append(iconDiv);
+
+
+
                         var tempF = $("<p>");
                         var ftemp = 32 + (9/5 * (daysForcast[i].temp.day - 279.15));
                         tempF.text("Temp: " + ftemp.toFixed(2) + "°F");
@@ -128,7 +139,7 @@ $(document).ready(function() {
                         forecastCard.append(humidF);
 
 
-                        forecastCard.addClass("card bg-primary w-400px forecast mx-2");
+                        forecastCard.addClass("card bg-primary w-400px forecast mx-2 p-3");
                         $("#cards").append(forecastCard);
 
                     
@@ -143,6 +154,41 @@ $(document).ready(function() {
         }
         else
         {}
+}
+
+
+//events
+    
+    $(".btnCity").on("click",function(){
+
+        var esto = $(this).attr("data-name");
+        setWeather(esto);
+
+    });
+    
+
+    $("#searchBtn").on("click",function(){
+
+        var esto = $("#searchInput").val().toLowerCase();
+        
+        
+        console.log(esto);
+        
+
+        var current = JSON.parse(localStorage.getItem("CitiesFile"));
+        console.log(current.indexOf(esto));
+        if(current.indexOf(esto) >= 0)
+        {
+            alert("City already added");
+        }
+        else
+        {
+            
+         setWeather(esto);
+
+        }
+
+        
        
     })
     

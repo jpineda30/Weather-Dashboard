@@ -169,7 +169,7 @@ function setWeather(name)
 
     $("#searchBtn").on("click",function(){
 
-        var esto = $("#searchInput").val().toLowerCase();
+        var esto = $("#searchInput").val();
         
         
         console.log(esto);

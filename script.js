@@ -68,10 +68,10 @@ function setWeather(name)
                
                 //save city
                 var current = JSON.parse(localStorage.getItem("CitiesFile"));
-                if(current.indexOf(response.name.toLowerCase()) == -1)
+                if(current.indexOf(response.name) == -1)
                 {
                     
-                    current.push(response.name.toLowerCase());
+                    current.push(response.name);
                     localStorage["CitiesFile"] = JSON.stringify(current);
 
                     var add = $("<div>");
@@ -169,11 +169,9 @@ function setWeather(name)
 
     $("#searchBtn").on("click",function(){
 
-        var esto = $("#searchInput").val();
+        var esto = $("#searchInput").val().toLowerCase();
         
-        
-        console.log(esto);
-        
+        esto = esto.charAt(0).toUpperCase() + esto.slice(1);
 
         var current = JSON.parse(localStorage.getItem("CitiesFile"));
         console.log(current.indexOf(esto));

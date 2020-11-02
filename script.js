@@ -40,7 +40,7 @@ function setWeather(name)
         {
             var city = name;
             
-            var urlNow = "http://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid=" + key;
+            var urlNow = "https://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid=" + key;
             
             $.ajax({
 
@@ -55,7 +55,7 @@ function setWeather(name)
                 var mainDate = moment(Mdt).format("DD/MM/YYYY");
 
                 $("#city").text(response.name + " ("+ mainDate +")");
-                var icon = "http://openweathermap.org/img/wn/"+ response.weather[0].icon+"@2x.png";
+                var icon = "https://openweathermap.org/img/wn/"+ response.weather[0].icon+"@2x.png";
                 $("#mainIcon").attr("src",icon);
 
                 var kelvin = 273.15;
@@ -121,7 +121,7 @@ function setWeather(name)
                         datec.text(moment(dt).format("DD/MM/YYYY"));
                         forecastCard.append(datec);
 
-                        var icon = "http://openweathermap.org/img/wn/"+ daysForcast[i].weather[0].icon+"@2x.png";
+                        var icon = "https://openweathermap.org/img/wn/"+ daysForcast[i].weather[0].icon+"@2x.png";
                         var iconDiv = $("<img>");
                         iconDiv.addClass("mainIcon");
                         iconDiv.attr("src",icon);

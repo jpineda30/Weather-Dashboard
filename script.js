@@ -86,7 +86,7 @@ function setWeather(name)
 
                     var add = $("<div>");
                     add.text(response.name);
-                    add.addClass("card p-2");
+                    add.addClass("card p-2 btnCity");
                     add.attr("data-name",response.name);
                     $("#menu").append(add);
 

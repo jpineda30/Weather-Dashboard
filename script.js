@@ -8,13 +8,16 @@ $(document).ready(function() {
     //get saved cities
 
     var cities = JSON.parse(localStorage.getItem("CitiesFile"));
+    var last = localStorage.getItem("lastConsult");
 
     if(cities === null)
     {
         var save = [];
         localStorage["CitiesFile"] = JSON.stringify(save);
     }
-    else{
+    else if
+    (cities.length >= 1)
+    {
 
         for(city of cities)
         {
@@ -25,10 +28,13 @@ $(document).ready(function() {
             $("#menu").append(add);
         }
 
+        setWeather(last);
 
 
 
     }
+    else
+    {}
 
 
 
@@ -36,6 +42,7 @@ $(document).ready(function() {
 
 function setWeather(name)
 {
+    
     $("#main").css("visibility","initial");
     $("#forecast").css("visibility","initial");
     
@@ -52,7 +59,7 @@ function setWeather(name)
     
             }).then(function(response){
                 
-                
+                localStorage.setItem("lastConsult",response.name);
                 var Mdate = response.dt;
                 var Mdt = new Date(Mdate * 1000);
                 var mainDate = moment(Mdt).format("DD/MM/YYYY");
@@ -103,6 +110,32 @@ function setWeather(name)
         
                 }).then(function(uvresponse){
                     $("#uv-index").text(uvresponse.value);
+
+                    if(uvresponse.value<=2)
+                    { 
+                        $("#uv-index").removeClass();
+                        $("#uv-index").addClass("bg-success h6 p-2 rounded-pill");
+                    }
+                    else 
+                    {
+                        if(uvresponse.value<=5)
+                        {
+                            $("#uv-index").removeClass();
+                            $("#uv-index").addClass("bg-warning h6 p-2 rounded-pill");
+                        }
+                        else if(uvresponse.value<=7)
+                        {
+                            $("#uv-index").removeClass();
+                            $("#uv-index").addClass("bg-orange h6 p-2 rounded-pill");
+                        }
+                        else
+                        {
+                            $("#uv-index").removeClass();
+                            $("#uv-index").addClass("bg-danger h6 p-2 rounded-pill");
+                        }
+
+                    }
+                   
                    
                 });
                 
@@ -178,7 +211,7 @@ function setWeather(name)
 //events
     
     $(".btnCity").on("click",function(){
-
+        
         var esto = $(this).attr("data-name");
         setWeather(esto);
 
@@ -188,21 +221,29 @@ function setWeather(name)
     $("#searchBtn").on("click",function(){
 
         var esto = $("#searchInput").val().toLowerCase();
-        
-        esto = esto.charAt(0).toUpperCase() + esto.slice(1);
-
-        var current = JSON.parse(localStorage.getItem("CitiesFile"));
-        console.log(current.indexOf(esto));
-        if(current.indexOf(esto) >= 0)
+        if(esto != "")
         {
-            alert("City already added");
+            esto = esto.charAt(0).toUpperCase() + esto.slice(1);
+
+            var current = JSON.parse(localStorage.getItem("CitiesFile"));
+            console.log(current.indexOf(esto));
+            if(current.indexOf(esto) >= 0)
+            {
+                alert("City already added");
+            }
+            else
+            {
+                
+            setWeather(esto);
+
+            }
         }
         else
         {
-            
-         setWeather(esto);
-
+            alert("Write a city");
         }
+        
+        
 
         
        

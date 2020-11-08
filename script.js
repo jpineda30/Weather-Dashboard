@@ -89,7 +89,6 @@ function setWeather(name)
                             var add = $("<button>");
                             add.text(response.name);
                             add.addClass("card p-2 btnCity w-100");
-                            add.addClass("active");
                             add.attr("data-name",response.name);
                             //add onclick
                             add.on("click",function(){
@@ -101,8 +100,8 @@ function setWeather(name)
                             
                                 
                             });
-                            //
-                            $("#cities").append(add);
+                            
+                            $("#menu").append(add);
 
 
                         }
@@ -224,7 +223,8 @@ function setWeather(name)
 //events
     
     $(".btnCity").on("click",function(){
-        
+
+              
         var esto = $(this).attr("data-name");
         console.log(esto);
         setWeather(esto);

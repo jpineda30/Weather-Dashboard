@@ -25,3 +25,16 @@
 {
     background-color: rgb(255, 102, 0);
 }
+
+.btnCity:hover{
+
+    background-color: rgb(175, 223, 238);
+
+    
+}
+
+.btnCity:active{
+
+    background-color:rgb(47, 162, 255);
+}
+

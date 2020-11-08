@@ -36,6 +36,9 @@ $(document).ready(function() {
 
 function setWeather(name)
 {
+    $("#main").css("visibility","initial");
+    $("#forecast").css("visibility","initial");
+    
     if(name != "")
         {
             var city = name;

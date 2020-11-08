@@ -51,7 +51,7 @@ function setWeather(name)
                 method:"GET"
     
             }).then(function(response){
-                console.log(response);
+                
                 
                 var Mdate = response.dt;
                 var Mdt = new Date(Mdate * 1000);
@@ -94,6 +94,21 @@ function setWeather(name)
                 var lat = response.coord.lat;
                 var long = response.coord.lon;
 
+                //retrive uv index
+                var uvindex = "https://api.openweathermap.org/data/2.5/uvi?lat="+lat+ "&lon="+long+"&appid="+key;
+                $.ajax({
+
+                    url:uvindex,
+                    method:"GET"
+        
+                }).then(function(uvresponse){
+                    $("#uv-index").text(uvresponse.value);
+                   
+                });
+                
+
+
+                //get forecast
                 var urlForecast = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+long+"&exclude={part}&appid=" + key ;
                 
                 //set today
@@ -116,7 +131,7 @@ function setWeather(name)
                     {
                         var date = daysForcast[i].dt;
                         var dt = new Date(date * 1000);
-                        console.log(daysForcast[i]);
+                        
 
                         var forecastCard = $("<div>");
                         var datec = $("<p>");
